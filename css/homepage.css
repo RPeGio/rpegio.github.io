@@ -1,0 +1,46 @@
+.codeArea
+{
+    background-color: rgb(255, 182, 194);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 255, 0.397);
+}
+.codeText
+{
+    font-family: Consolas;
+    font-style: italic;
+    border-bottom: 3px dotted grey;
+}
+.tri
+{
+    width: 0;
+    height: 0;
+    background-color: transparent;
+    border: 9px solid transparent;
+    border-bottom: 12px solid rgb(255, 182, 194);
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    margin-left: 40px;
+}
+.txtArea
+{
+    background-color: rgb(197, 224, 255);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 2px 2px 2px rgba(0, 4, 255, 0.397);
+}
+.more
+{
+    color: #1f1e33;
+}
+.more:hover
+{
+    color: rgba(190, 190, 0, 0.897);
+}
+.contact
+{
+    text-align: center;
+    font-size: 40px;
+    padding-top: 70px;
+    color: rgb(228, 205, 143);
+}

@@ -1,0 +1,47 @@
+*
+{
+    padding: 0;
+    margin: 0;
+}
+h1,
+h6
+{
+    text-align: center;
+    font-size: 30px;
+    font-family: "Microsoft Yahei";
+}
+div
+{
+    width: 500px;
+    height: 200px;
+    margin: 50px auto;
+}
+div.button
+{
+    width: 128px;
+    height: 42px;
+    margin: 50px auto;
+    border: 2px solid rgba(0,0,0,.3);
+    background-color: white;
+    border-radius: 10px;
+    transition: background-color 0.2s linear;
+}
+div.button:hover
+{
+    background-color: aqua;
+    text-decoration: underline;
+}
+div.button a
+{
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    line-height: 42px;
+}
+p
+{
+    font-style: italic;
+    color: #9e9e9e;
+    text-indent: 2em;
+    margin-top: 30px;
+}
