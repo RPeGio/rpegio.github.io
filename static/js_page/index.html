@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang = "zh-CN">
+<head>
+    <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width = device-width, user-scable = no, initial-scale = 1.0, maximum-scale = 1.0, minimum-scale = 1.0">
+    <link rel = "shortcut icon" href = "../../favicon.ico">
+    <link rel = "stylesheet" href = "../../css/base.css">
+    <link rel = "stylesheet" href = "#">
+    <title>RPeGio's Site</title>
+</head>
+<body>
+    <div class="top">
+        <div class="artfont"><a href="../home/">RPeGio</a></div>
+    </div>
+    <div class="main">
+        <div class="content_box" style = "float: none; margin: 60px auto;">
+            <h1 style = "text-align: center;">别骂了别骂了，只是还没学怎么触发js T_T</h1></div>
+            <script>
+                alert("这是个冒泡排序算法");
+                alert("接下来请输入任意5个不相等的数");
+                let num = [];
+                for(let i = 0;i < 5;i++)
+                    num.push(prompt(`请输入第${i+1}个数`));
+                let temp = 4;
+                while(temp != 0)
+                {
+                    for(let j = 0;j < temp;j++)
+                    {
+                        if(num[j] > num[j+1])
+                        {
+                            let a = num[j];
+                            num[j] = num[j+1];
+                            num[j+1] = a;
+                        }
+                    }
+                    temp--;
+                }
+                alert(`排序结果(从小至大)：${num}`);
+            </script>
+            <!-- <h1>冒泡排序</h1>
+            <div class="btn_mppx">
+             
+            </div> -->
+        </div>
+    </div>
+    <div class="footer">
+     
+    </div>
+</body>
+</html>
