@@ -55,7 +55,7 @@ body
     font-family: Ink free,cursive,LiSu,sans-serif;
     background-color: transparent;
     text-decoration: none;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 .artfont a:hover
 {
@@ -64,15 +64,16 @@ body
 }
 .main
 {
-    height: 1600px;
+    height: 1200px;
     padding: 60px;
     background-color: transparent;
 }
 .content_box
 {
+    position: relative;
     float: left;
     width: 60%;
-    height: 1450px;
+    height: 1100px;
     background-color: white;
     border-radius: 7px;
     padding: 50px;
@@ -92,12 +93,6 @@ body
     box-sizing: border-box;
     margin-top: 200px;
     margin-left: 11%;
-}
-.nonfloat
-{
-    height: 1600px;
-    background-image: url(../logo.jpg);
-    opacity: 0.05;
 }
 .footer
 {
@@ -154,5 +149,20 @@ body
     transform: translateX(-50%);
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+.btm-descr
+{
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.btm-descr p
+{
+    font-style: italic;
+    color: rgb(172, 172, 172);
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
