@@ -4,3 +4,7 @@ h4
     font-family: consolas;
     color: rgb(199, 199, 199);
 }
+.main
+{
+    height: auto;
+}

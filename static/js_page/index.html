@@ -4,7 +4,7 @@
     <meta charset = "UTF-8">
     <link rel = "shortcut icon" href = "../../favicon.ico">
     <link rel = "stylesheet" href = "../../css/base.css">
-    <link rel = "stylesheet" href = "#">
+    <link rel = "stylesheet" href = "../../css/js_page.css">
     <title>Js测试</title>
 </head>
 <body>
@@ -13,33 +13,11 @@
     </div>
     <div class="main">
         <div class="content_box" style = "float: none; margin: 60px auto;">
-            <h1 style = "text-align: center;">别骂了别骂了，只是还没学怎么触发js T_T</h1></div>
-            <script>
-                alert("这是个冒泡排序算法");
-                alert("接下来请输入任意5个不相等的数");
-                let num = [];
-                for(let i = 0;i < 5;i++)
-                    num.push(prompt(`请输入第${i+1}个数`));
-                let temp = 4;
-                while(temp != 0)
-                {
-                    for(let j = 0;j < temp;j++)
-                    {
-                        if(num[j] > num[j+1])
-                        {
-                            let a = num[j];
-                            num[j] = num[j+1];
-                            num[j+1] = a;
-                        }
-                    }
-                    temp--;
-                }
-                alert(`排序结果(从小至大)：${num}`);
-            </script>
-            <!-- <h1>冒泡排序</h1>
-            <div class="btn_mppx">
-             
-            </div> -->
+            <h1>冒泡排序</h1>
+            <div class = "btn_box">
+                <input type = "button" value = "点击触发" class = "btn" onclick = "mppx()">
+            </div>
+            <hr>
         </div>
     </div>
     <div class = "footer">
@@ -51,6 +29,32 @@
             <span style = "font-family: icomoon;"><a href = "https://soundcloud.com/tslocsqdsfyk" class = "contact_a"></a></span>
             <span><a href = "https://space.bilibili.com/430187058"><img src = "../../icon/bilibili.png"></a></span>
         </div>
+        <div class = "cpyrt">&copy;&nbsp;2022-2023 RPeGio,All rights reserved.</div>
     </div>
+    <script>
+        function mppx()
+        {
+            alert("这是个冒泡排序算法");
+            alert("接下来请输入任意5个不相等的数");
+            const num = [];
+            for(let i = 0; i < 5; i++)
+                num.push(Number(prompt(`请输入第${i+1}个数`)));
+            const len = num.length;
+            let isSwapped = false;
+            do
+            {
+                isSwapped = false;
+                for(let j = 0; j < len - 1; j++)
+                {
+                    if(num[j] > num[j+1])
+                    {
+                        [num[j], num[j+1]] = [num[j+1], num[j]];
+                        isSwapped = true;
+                    }
+                }
+            } while(isSwapped);
+            alert(`排序结果(从小至大)：${num}`);
+        }
+    </script>
 </body>
 </html>

@@ -20,7 +20,7 @@ body
     font-weight: normal;
     font-style: normal;
     font-display: block;
-}  
+}
 .bgc_transparent
 {
     background-color: transparent;
@@ -73,7 +73,7 @@ body
     position: relative;
     float: left;
     width: 60%;
-    height: 1100px;
+    min-height: 1100px;
     background-color: white;
     border-radius: 7px;
     padding: 50px;
@@ -97,6 +97,7 @@ body
 .footer
 {
     position: relative;
+    bottom: 0px;
     height: 350px;
     background-color: rgb(59, 59, 59);
 }
@@ -165,4 +166,13 @@ body
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.cpyrt
+{
+    font-size: 14px;
+    color: rgb(214, 214, 214);;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
 }
