@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta language = "zh-CN">
+    <title>方差计算</title>
+    <style>
+        .main
+        {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .main > *
+        {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        .title
+        {
+            font-size: 35px;
+            color: blueviolet;
+        }
+        .subtitle
+        {
+            font-style: italic;
+            color: grey;
+            margin-top: -5px;
+            margin-bottom: 30px;
+        }
+        .fraction_line
+        {
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 2px;
+            width: 90%;
+            background-color: #000;
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+        .fraction_line2
+        {
+            width: auto;
+            height: 1px;
+            background-color: #000;
+            margin-top: 1px;
+            margin-bottom: 1px;
+        }
+        .fraction_line, .X_den, .p_den
+        {
+            display: none;
+        }
+        .block_visible
+        {
+            display: block;
+        }
+        .inl_block_visible
+        {
+            display: inline-block;
+        }
+        td
+        {
+            width: 70px;
+            height: 30px;
+            text-align: center;
+        }
+        .result
+        {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #throw_exception
+        {
+            color: red;
+            font-style: italic;
+        }
+        .fraction_result
+        {
+            display: inline-block;
+            text-align: center;
+        }
+        #average,#variance
+        {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+    <script src="../../js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+    <div class="main">
+        <div class="title">离散型随机变量均值&方差计算</div>
+        <div class="subtitle">脚本作者：RPeGio （最后一次更新于2024/4/13）</div>
+        <div class="btn_area">
+            <input type="button" value="+ 增加X取值个数" onclick="add_X()">
+            <input type="button" value="- 减少X取值个数" onclick="remove_X()">
+        </div>
+        <div class="fraction_check"><input type="checkbox" id="fraction_check" onclick="fraction_transform()"><label for="fraction_check">以分数形式输入</label></div>
+        <table border="1" cellspacing="0">
+            <tr id="X_list">
+                <td class="X_head">X</td>
+                <td class="X_input" id="X_input1">
+                    <input type="text" id="X1_mol" size="1px">
+                    <div class="fraction_line"></div>
+                    <input type="text" class="X_den" id="X1_den" size="1px">
+                </td>
+            </tr>
+            <tr id="p_list">
+                <td class="p_head">p</td>
+                <td class="p_input" id="p_input1">
+                    <input type="text" id="p1_mol" size="1px">
+                    <div class="fraction_line"></div>
+                    <input type="text" class="p_den" id="p1_den" size="1px">
+                </td>
+            </tr>
+            <tr><input type="reset" id="resetButton"></tr>
+        </table>
+        <input type="button" value="-点击计算结果-" onclick="calc_result()">
+        <div class="result">
+            <div id="throw_exception"></div>
+            <div id="average"></div>
+            <div id="variance"></div>
+        </div>
+    </div>
+    <script>
+        let list_amt = 1;
+
+        document.addEventListener('DOMContentLoaded', function()
+        {  
+            document.getElementById('resetButton').addEventListener('click', function()
+            { 
+                var inputs = document.querySelectorAll('input[type="text"]');  
+                inputs.forEach(function(input)
+                {
+                    input.value = '';  
+                });  
+            });  
+        });
+
+        function add_X()
+        {
+            list_amt++;
+            if(document.getElementById('fraction_check').checked)
+            {
+                $('#X_list').append(`
+                    <td class="X_input" id="X_input${list_amt}">
+                        <input type="text" id="X${list_amt}_mol" size="1px" placeholder="分子">
+                        <div class="fraction_line block_visible"></div>
+                        <input type="text" class="X_den inl_block_visible" id="X${list_amt}_den" size="1px" placeholder="分母">
+                    </td>
+                `);
+                $('#p_list').append(`
+                    <td class="p_input" id="p_input${list_amt}">
+                        <input type="text" id="p${list_amt}_mol" size="1px" placeholder="分子">
+                        <div class="fraction_line block_visible"></div>
+                        <input type="text" class="p_den inl_block_visible" id="p${list_amt}_den" size="1px" placeholder="分母">
+                    </td>
+                `);
+            }
+            else
+            {
+                $('#X_list').append(`
+                    <td class="X_input" id="X_input${list_amt}">
+                        <input type="text" id="X${list_amt}_mol" size="1px">
+                        <div class="fraction_line"></div>
+                        <input type="text" class="X_den" id="X${list_amt}_den" size="1px">
+                    </td>
+                `);
+                $('#p_list').append(`
+                    <td class="p_input" id="p_input${list_amt}">
+                        <input type="text" id="p${list_amt}_mol" size="1px">
+                        <div class="fraction_line"></div>
+                        <input type="text" class="p_den" id="p${list_amt}_den" size="1px">
+                    </td>
+                `);
+            }
+            console.log(list_amt);
+        }
+
+        function remove_X()
+        {
+            $(`#X_input${list_amt}`).remove();
+            $(`#p_input${list_amt}`).remove();
+            if(list_amt != 0)
+                list_amt--;
+            console.log(list_amt);
+        }
+        
+        function fraction_transform()
+        {
+            const checkbox = document.getElementById('fraction_check');
+            if(checkbox.checked)
+            {
+                console.log('checked');
+                frac_line = document.getElementsByClassName('fraction_line');
+                for(let i = 0;i < frac_line.length;i++)
+                    frac_line[i].setAttribute('class', 'fraction_line block_visible');
+                for(let i = 1;i <= list_amt;i++)
+                {
+                    document.getElementById(`X${i}_den`).setAttribute('class', 'X_den inl_block_visible');
+                    document.getElementById(`X${i}_den`).placeholder = "分母";
+                    document.getElementById(`p${i}_den`).setAttribute('class', 'p_den inl_block_visible');
+                    document.getElementById(`p${i}_den`).placeholder = "分母";
+
+                    document.getElementById(`X${i}_mol`).placeholder = "分子";
+                    document.getElementById(`p${i}_mol`).placeholder = "分子";
+                }
+            }
+            else
+            {
+                console.log('unchecked');
+                frac_line = document.getElementsByClassName('fraction_line');
+                for(let i = 0;i < frac_line.length;i++)
+                    frac_line[i].setAttribute('class', 'fraction_line');
+                for(let i = 1;i <= list_amt;i++)
+                {
+                    document.getElementById(`X${i}_den`).setAttribute('class', 'X_den');
+                    document.getElementById(`p${i}_den`).setAttribute('class', 'p_den');
+                    document.getElementById(`X${i}_mol`).placeholder = "";
+                    document.getElementById(`p${i}_mol`).placeholder = "";
+                }
+            }
+        }
+
+        function gcd(a, b) //最大公约数
+        {  
+            if (b === 0)
+                return a;  
+            else
+                return gcd(b, a % b);
+        }  
+  
+        function lcm(a, b) //最小公倍数
+        {  
+            return (a * b) / gcd(a, b);  
+        }  
+
+        function frac_add(arrA, arrB)
+        {  
+            let numerator = arrA[0] * arrB[1] + arrB[0] * arrA[1]; // 通分后的分子  
+            let denominator = arrA[1] * arrB[1]; // 通分后的分母  
+            
+            if (gcd(numerator, denominator) != 1)
+            {  
+                let gcd_tmp = gcd(numerator, denominator);  
+                numerator /= gcd_tmp;  
+                denominator /= gcd_tmp;  
+            }  
+            
+            return [numerator, denominator];  
+        }
+        
+        function frac_minus(arrA, arrB)
+        {  
+            let numerator = arrA[0] * arrB[1] - arrB[0] * arrA[1]; // 通分后的分子  
+            let denominator = arrA[1] * arrB[1]; // 通分后的分母  
+            
+            if (gcd(numerator, denominator) != 1)
+            {  
+                let gcd_tmp = gcd(numerator, denominator);  
+                numerator /= gcd_tmp;  
+                denominator /= gcd_tmp;  
+            }  
+            
+            return [numerator, denominator];  
+        }
+
+        function calc_result()
+        {
+            try
+            {
+                if(!document.getElementById('fraction_check').checked)
+                {
+                    let XArray = [],pArray = [];
+                    let average = 0;
+                    for(let i = 1;i <= list_amt;i++)
+                    {
+                        XArray[i] = document.getElementById(`X${i}_mol`).value;
+                        pArray[i] = document.getElementById(`p${i}_mol`).value;
+                        average += XArray[i] * pArray[i];
+                    }
+                    // console.log(XArray)
+                    // console.log(pArray)
+                    let variance = 0;
+                    for(let i = 1;i <= list_amt;i++)
+                        variance += Math.pow((XArray[i]-average), 2) * pArray[i];
+                    average = Math.round(average * 1000) / 1000;
+                    variance = Math.round(variance * 1000) / 1000;
+                    document.getElementById('throw_exception').innerText = '';
+                    document.getElementById('average').innerHTML = `E(X) = ${average}`;
+                    document.getElementById('variance').innerHTML = `D(X) = ${variance}`;
+                }
+                else
+                {
+                    let XMolArray = [],pMolArray = [],XDenArray = [],pDenArray = [];
+                    let XMolArray2 = [],pMolArray2 = [],XDenArray2 = [],pDenArray2 = [];
+                    let final_fraction = [];
+                    for(let i = 1;i <= list_amt;i++)
+                    {
+                        XMolArray[i] = document.getElementById(`X${i}_mol`).value;
+                        pMolArray[i] = document.getElementById(`p${i}_mol`).value;
+                        XDenArray[i] = document.getElementById(`X${i}_den`).value;
+                        pDenArray[i] = document.getElementById(`p${i}_den`).value;
+                        XMolArray2[i] = document.getElementById(`X${i}_mol`).value;
+                        pMolArray2[i] = document.getElementById(`p${i}_mol`).value;
+                        XDenArray2[i] = document.getElementById(`X${i}_den`).value;
+                        pDenArray2[i] = document.getElementById(`p${i}_den`).value;
+                        if(gcd(XDenArray[i], pMolArray[i]) != 1)
+                        {
+                            let cgcd = gcd(XDenArray[i], pMolArray[i]);
+                            XDenArray[i] /= cgcd;
+                            pMolArray[i] /= cgcd;
+                        }
+                        if(gcd(XMolArray[i], pDenArray[i]) != 1)
+                        {
+                            let cgcd = gcd(XMolArray[i], pDenArray[i]);
+                            XMolArray[i] /= cgcd;
+                            pDenArray[i] /= cgcd;
+                        }
+                        final_fraction[i] = [XMolArray[i] * pMolArray[i], XDenArray[i] * pDenArray[i]];
+                    }
+                    // console.log(final_fraction);
+                    let final_average = [final_fraction[1][0],final_fraction[1][1]];
+                    let final_variance = [0,1];
+                    let final_variance_pow = [];
+                    let final_variance_powed;
+                    for(let i = 1;i < final_fraction.length - 1;i++) // 算均值
+                    {
+                        let final_average_tmp = [final_average[0],final_average[1]];
+                        final_average[0] = frac_add(final_average_tmp,final_fraction[i+1])[0];
+                        final_average[1] = frac_add(final_average_tmp,final_fraction[i+1])[1];
+                    }
+
+                    for(let i = 1;i <= list_amt;i++) // 算方差
+                    {
+                        final_variance_pow = frac_minus([XMolArray2[i], XDenArray2[i]], final_average);
+                        final_variance_powed = [Math.pow(final_variance_pow[0], 2),Math.pow(final_variance_pow[1], 2)]
+                        
+                        if(gcd(final_variance_powed[0],pDenArray2[i]) != 1)
+                        {
+                            let cgcd = gcd(final_variance_powed[0],pDenArray2[i]);
+                            final_variance_powed[0] /= cgcd;
+                            pDenArray2[i] /= cgcd;
+                        }
+                        if(gcd(final_variance_powed[1],pMolArray2[i]) != 1)
+                        {
+                            let cgcd = gcd(final_variance_powed[1],pMolArray2[i]);
+                            final_variance_powed[1] /= cgcd;
+                            pMolArray2[i] /= cgcd;
+                        }
+                        let final_mol = final_variance_powed[0] *= pMolArray2[i];
+                        let final_den = final_variance_powed[1] *= pDenArray2[i];
+                        // final_variance_tmp = final_variance;
+                        final_variance = frac_add(final_variance,[final_mol,final_den]);
+                        // final_variance[1] = frac_add(final_variance,[final_mol,final_den])[1];
+                    }
+                    if(final_average[1] == 1)
+                    {
+                        document.getElementById('throw_exception').innerText = '';
+                        document.getElementById('average').innerHTML = `E(X) = &nbsp
+                            <span class = "fraction_result">
+                                <div>${final_average[0]}</div>
+                            </span>
+                        `;
+                    }
+                    else
+                    {
+                        document.getElementById('throw_exception').innerText = '';
+                        document.getElementById('average').innerHTML = `E(X) = &nbsp
+                            <span class = "fraction_result">
+                                <div>${final_average[0]}</div>
+                                <div class = "fraction_line2"></div>
+                                <div>${final_average[1]}</div>
+                            </span>
+                        `;
+                    }
+                    if(final_variance[1] == 1)
+                    {
+                        document.getElementById('variance').innerHTML = `D(X) = &nbsp
+                            <span class = "fraction_result">
+                                <div>${final_variance[0]}</div>
+                            </span>
+                        `;
+                    }
+                    else
+                    {
+                        document.getElementById('variance').innerHTML = `D(X) = &nbsp
+                            <span class = "fraction_result">
+                                <div>${final_variance[0]}</div>
+                                <div class = "fraction_line2"></div>
+                                <div>${final_variance[1]}</div>
+                            </span>
+                        `;
+                    }
+                }
+            }
+            catch
+            {
+                document.getElementById('throw_exception').innerText = '发生错误 x_x ，请检查输入是否有误';
+                document.getElementById('average').innerHTML = ``;
+                document.getElementById('variance').innerHTML = ``;    
+            }
+        }
+    </script>
+</body>
